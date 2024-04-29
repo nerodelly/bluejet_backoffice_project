@@ -1,0 +1,56 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+        {% block title %}Bluejet &#8211; Dashboard{% endblock %}
+      </title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/x-icon" href="{% static 'img/logo.png' %}">
+
+
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Montserrat", sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+  <!-- Navbar -->
+  <nav class="bg-blue-500 p-4 text-white">
+    <div class="flex justify-between items-center container mx-aut  o">
+      <div>
+        <a href="{% url 'index' %}"><img src="{% static 'img/logo.png' %}" alt="Logo" class="h-11 w-13"></a>
+      </div>
+      <div class="space-x-4">
+        <a href="{% url 'index' %}"><button class="bg-#2B34E4 px-4 py-2 rounded hover:bg-blue-700"><i class="fas fa-sign-out-alt mr-2 text-white transition-transform duration-300"
+          title="Return"></i> home</button></a>
+        <a href="{% url 'logout' %}"><button class="bg-#2B34E4 px-4 py-2 rounded hover:bg-red-700"><i class="fas fa-sign-out-alt mr-2 text-white transition-transform duration-300"
+          title="Logout"></i> log out</button></a>
+
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}
+
+  {% endblock content %}
+
+</body>
+</html>

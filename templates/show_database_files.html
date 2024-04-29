@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Files list{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+<!-- Main Content -->
+<main class="container mx-auto p-8">
+  <div class="bg-white p-6 rounded-lg shadow-lg">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-4xl font-semibold mb-4">Liste des fichiers</h1>
+      <a>
+          <button id="importButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Importer les nouveaux fichiers
+          </button>
+      </a>
+    </div>
+    
+    <table id="fileTable" class="min-w-full text-gray-900">
+      <thead>
+          <tr class="bg-gray-100">
+              <th class="py-4 px-6 border-b text-left">Nom fichier</th>
+              <th class="py-4 px-6 border-b text-left">Date d'importation</th>
+              <th class="py-4 px-6 border-b text-left">Taille</th>
+              <th class="py-4 px-6 border-b text-left">Etat</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for file in files %}
+          <tr class="hover:bg-gray-100">
+              <td class="py-4 px-6 border-b">{{ file.name }}</td>
+              <td class="py-4 px-6 border-b">{{ file.date_import }}</td>
+              <td class="py-4 px-6 border-b">{{ file.taille }}</td>
+              <td class="py-4 px-6 border-b">{{ file.etat }}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  
+  </div>
+  </div>
+</main>
+{% endblock %}
+//

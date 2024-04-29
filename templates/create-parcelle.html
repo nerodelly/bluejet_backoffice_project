@@ -1,0 +1,71 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Bluejet &#8211; Créer parcelle{% endblock %} {% block content %}
+
+
+  <!-- Main Content -->
+  <main class="container mx-auto p-8">
+    <h1 class="text-4xl font-semibold mb-8">Database</h1>
+
+    <!-- Create
+    <form method="POST">
+        {% csrf_token %}
+
+      <!-- Parcelle 
+      <fieldset class="bg-white p-6 rounded-lg shadow mb-4">
+        <legend class="text-2xl font-semibold">Parcelle</legend>
+        <div class="space-y-4">
+          <input type="text" name="code-arbre" placeholder="Code Arbre" required class="w-full p-2 border rounded">
+          <input type="text" name="numero-collection" placeholder="Numero Collection" required class="w-full p-2 border rounded">
+        </div>
+      </fieldset>
+
+      <!-- Caractéristiques d'Arbre 
+      <fieldset class="bg-white p-6 rounded-lg shadow mb-4">
+        <legend class="text-2xl font-semibold">Caractéristiques d'Arbre</legend>
+        <div class="space-y-4">
+          <input type="text" name="code-caracteristique-arbre" placeholder="Code Caracteristique Arbre" required class="w-full p-2 border rounded">
+          <select name="port" required class="w-full p-2 border rounded">            <option value="" disabled selected>Port</option>
+            <option value="etale">Etale</option>
+            <option value="dresse">Dressé</option>
+            <option value="dresse-a-etale">Dressé à Etale</option>
+          </select>
+          <select name="vigueur" required class="w-full p-2 border rounded">
+            <option value="" disabled selected>Vigueur</option>
+            <option value="moyenne">Moyenne</option>
+            <option value="faible">Faible</option>
+            <option value="vigoureuse">Vigoureuse</option>
+          </select>
+          <input type="text" name="floraison" placeholder="Floraison" required class="w-full p-2 border rounded">
+          <select name="epoque" required class="w-full p-2 border rounded">
+            <option value="" disabled selected>Epoque</option>
+            <option value="debut-mois">Début Mois</option>
+            <option value="mi-mois">Mi-Mois</option>
+            <option value="fin-mois">Fin Mois</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <!-- Fruit 
+      <fieldset class="bg-white p-6 rounded-lg shadow mb-4">
+        <legend class="text-2xl font-semibold">Fruit</legend>
+        <div class="space-y-4">
+          <input type="text" name="code-fruit" placeholder="Code Fruit" required class="w-full p-2 border rounded">
+          <input type="text" name="taille" placeholder="Taille" required class="w-full p-2 border rounded">
+          <input type="text" name="forme" placeholder="Forme" required class="w-full p-2 border rounded">
+          <input type="text" name="poids-moyenne" placeholder="Poids Moyenne" required class="w-full p-2 border rounded">
+          <input type="text" name="maturite" placeholder="Maturité" required class="w-full p-2 border rounded">
+          <input type="text" name="aspect-surface" placeholder="Aspect Surface" required class="w-full p-2 border rounded">
+          <input type="text" name="calibre" placeholder="Calibre" required class="w-full p-2 border rounded">
+          <input type="text" name="chair" placeholder="Chair" required class="w-full p-2 border rounded">
+          <input type="text" name="teneur" placeholder="Teneur" required class="w-full p-2 border rounded">
+          <input type="text" name="autres" placeholder="Autres" required class="w-full p-2 border rounded">
+        </div>
+      </fieldset>
+
+      <!-- Submit Button 
+      <button type="submit" class="bg-green-500 text-white px-8 py-4 rounded-lg hover:bg-green-600">
+        Créer
+      </button>
+    </form>
+  </main>
+  Parcelle Form -->
+  {% endblock content %}

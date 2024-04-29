@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}IRA &#8211; Liste parcelles{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+<!-- Main Content -->
+<main class="container mx-auto p-8">
+  <div class="bg-white p-6 rounded-lg shadow-lg">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-4xl font-semibold mb-4">Liste des parcelles</h1>
+      <a href="{% url 'create_parcelle' %}">
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Créer une parcelle
+          </button>
+      </a>
+    </div>
+    <!-- parcelles Table -->
+    <table id="parcellesTable" class="min-w-full text-gray-900">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="py-4 px-6 border-b text-left">Code Arbre</th>
+          <th class="py-4 px-6 border-b text-left">Numero Collection</th>
+          <th class="py-4 px-6 border-b text-left">Code Caracteristique Arbre</th>
+          <th class="py-4 px-6 border-b text-left">Port</th>
+          <th class="py-4 px-6 border-b text-left">Vigueur</th>
+          <th class="py-4 px-6 border-b text-left">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for parcelle_group in parcelle_groups %}
+        <tr class="hover:bg-gray-100">
+          <td class="py-4 px-6 border-b">{{ parcelle_group.parcelle.code_arbre }}</td>
+          <td class="py-4 px-6 border-b">{{ parcelle_group.parcelle.numero_collection }}</td>
+          <td class="py-4 px-6 border-b">{{ parcelle_group.caracteristiques_arbre.code_caracteristique_arbre }}</td>
+          <td class="py-4 px-6 border-b">{{ parcelle_group.caracteristiques_arbre.port }}</td>
+          <td class="py-4 px-6 border-b">{{ parcelle_group.caracteristiques_arbre.vigueur }}</td>
+          <td class="py-4 px-6 border-b">
+            <a href="{% url 'parcelle_delete' parcelle_group.id %}"><button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                <i class="fas fa-trash"></i>
+            </button></a>
+            <button onclick="openParcelleModal({{ forloop.counter }})" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                <i class="fas fa-eye"></i>
+            </button>
+        </td>
+</tr>
+        {% endfor %}
+          </tbody>
+    </table>
+
+
+  {% for parcelle_group in parcelle_groups %}
+  <!-- Modal Overlay (Initially hidden) -->
+  <div id="parcelleModalOverlay_{{ forloop.counter }}" class="fixed inset-0 bg-black opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <!-- Modal (Hidden by default, fadeIn transition) -->
+  <div id="parcelleModal_{{ forloop.counter }}" class="fixed inset-0 hidden z-10 flex items-center justify-center opacity-0 transition-opacity duration-300">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-1/2">
+      <h1 class="text-2xl font-semibold mb-4">Parcelle Details</h1>
+      <div>
+        <strong>Code Arbre:</strong> {{ parcelle_group.parcelle.code_arbre }}<br />
+        <strong>Numero Collection:</strong> {{ parcelle_group.parcelle.numero_collection }}<br /><br />
+        <!-- New Fields for Caractéristiques d'Arbre -->
+        <strong>Code Caracteristique Arbre:</strong> {{ parcelle_group.caracteristiques_arbre.code_caracteristique_arbre }}<br />
+        <strong>Port:</strong> {{ parcelle_group.caracteristiques_arbre.port }}<br />
+        <strong>Vigueur:</strong> {{ parcelle_group.caracteristiques_arbre.vigueur }}<br />
+        <strong>Floraison:</strong> {{ parcelle_group.caracteristiques_arbre.floraison }}<br />
+        <strong>Epoque:</strong> {{ parcelle_group.caracteristiques_arbre.epoque }}<br /><br />
+        <!-- New Fields for Fruit -->
+        <strong>Code Fruit:</strong> {{ parcelle_group.fruit.code_fruit }}<br />
+        <strong>Taille:</strong> {{ parcelle_group.fruit.taille }}<br />
+        <strong>Forme:</strong> {{ parcelle_group.fruit.forme }}<br />
+        <strong>Poids Moyenne:</strong> {{ parcelle_group.fruit.poids_moyenne }}<br />
+        <strong>Maturité:</strong> {{ parcelle_group.fruit.maturite }}<br />
+        <strong>Aspect Surface:</strong> {{ parcelle_group.fruit.aspect_surface }}<br />
+        <strong>Calibre:</strong> {{ parcelle_group.fruit.calibre }}<br />
+        <strong>Chair:</strong> {{ parcelle_group.fruit.chair }}<br />
+        <strong>Teneur:</strong> {{ parcelle_group.fruit.teneur }}<br />
+        <strong>Autres:</strong> {{ parcelle_group.fruit.autres }}<br /><br />
+      </div>
+      <button onclick="closeModal('parcelleModal_{{ forloop.counter }}')" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 mt-4">Close</button>
+    </div>
+  </div>
+{% endfor %}
+</main>
+
+<script>
+  function openParcelleModal(id) {
+    const modal = document.getElementById(`parcelleModal_${id}`);
+    const overlay = document.getElementById(`parcelleModalOverlay_${id}`);
+    modal.classList.remove("hidden", "opacity-0", "pointer-events-none");
+    overlay.classList.remove("opacity-0", "pointer-events-none");
+    overlay.classList.add("opacity-50");
+  }
+
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    const overlay = document.getElementById(`parcelleModalOverlay_${id.split('_')[1]}`);
+    modal.classList.add("hidden", "opacity-0", "pointer-events-none");
+    overlay.classList.add("opacity-0", "pointer-events-none");
+    overlay.classList.remove("opacity-50");
+  }
+</script>
+
+<script>
+  $(document).ready(function() {
+    $('#parcellesTable').DataTable({
+      "pagingType": "full_numbers",
+      "language": {
+        "paginate": {
+          "first": '<i class="fas fa-angle-double-left"></i>',
+          "previous": '<i class="fas fa-angle-left"></i>',
+          "next": '<i class="fas fa-angle-right"></i>',
+          "last": '<i class="fas fa-angle-double-right"></i>'
+        },
+        "search": "_INPUT_",
+        "searchPlaceholder": "Rechercher...",
+        "lengthMenu": "Afficher _MENU_ enregistrements par page",
+        "zeroRecords": "Aucun enregistrement trouvé",
+        "info": "Affichage de la page _PAGE_ sur _PAGES_",
+        "infoEmpty": "Aucun enregistrement disponible",
+        "infoFiltered": "(filtré à partir de _MAX_ enregistrements totaux)"
+      },
+      "paging": true,
+      "searching": true,
+      "ordering": false
+    });
+  });
+</script>
+
+
+{% endblock content %}

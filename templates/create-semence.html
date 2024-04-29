@@ -1,0 +1,148 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Bluejet &#8211; Créer semence{% endblock %} {% block content %}
+
+  <!-- Main Content -->
+  <main class="container mx-auto p-8">
+    <h1 class="text-4xl font-semibold mb-8">Analytics</h1>
+    <!-- Statistiques -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="bg-white p-8 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Chart1</h2>
+        <canvas id="barChart" class="h-40"></canvas>
+      </div>
+      <div class="bg-white p-8 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Chart 2</h2>
+        <canvas id="pieChart" class="h-40"></canvas>
+      </div>
+      <div class="bg-white p-8 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Chart 3</h2>
+        <canvas id="doughnutChart" class="h-40"></canvas>
+      </div>
+  </div>
+</main>
+
+<script>
+  // Graphique à barres pour les Types d'Accession
+  var ctxBar = document.getElementById("barChart").getContext("2d");
+  var labels = {{ type_count|safe }};
+  var barData = {
+    labels: labels.map(e => e.type_accession),
+    datasets: [{
+      label: "Nombre d'Accessions",
+      data: labels.map(e => e.count),
+      backgroundColor: ["#1D72B8", "#F46036", "#2E294E"],
+    }],
+  };
+  var barChart = new Chart(ctxBar, {
+    type: "bar",
+    data: barData,
+  });
+
+  // Graphique à secteurs pour le Compte des Parcelles
+  var ctxPie = document.getElementById("pieChart").getContext("2d");
+  var pieData = {
+    labels: ["Parcelles"],
+    datasets: [{
+      data: [{{ parcelle_count }}],
+      backgroundColor: ["#6B4226"],
+    }],
+  };
+  var pieChart = new Chart(ctxPie, {
+    type: "pie",
+    data: pieData,
+  });
+
+  // Graphique à anneaux pour les Types de Floraison
+  var ctxDoughnut = document.getElementById("doughnutChart").getContext("2d");
+  var floraison_labels = {{ floraison_count|safe }};
+  var doughnutData = {
+    labels: floraison_labels.map(e => e.floraison),
+    datasets: [{
+      data: floraison_labels.map(e => e.count),
+      backgroundColor: ["#D7263D", "#F46036", "#6B4226"],
+    }],
+  };
+  var doughnutChart = new Chart(ctxDoughnut, {
+    type: "doughnut",
+    data: doughnutData,
+  });
+</script>
+
+    <!-- Create Semence Form 
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <!-- Accession 
+      <fieldset class="bg-white p-6 rounded-lg shadow mb-4">
+        <legend class="text-2xl font-semibold">Accession</legend>
+        <div class="space-y-4">
+          <input type="text" name="code-accession" placeholder="Code Accession" required class="w-full p-2 border rounded">
+          <input type="text" name="nom-accession" placeholder="Nom Accession" required class="w-full p-2 border rounded">
+          <input type="text" name="type-accession" placeholder="Type Accession" required class="w-full p-2 border rounded">
+          <select name="classification" required class="w-full p-2 border rounded">
+            <option value="" disabled selected>Classification</option>
+            <option value="genre">Genre</option>
+            <option value="espèce">Espèce</option>
+          </select>
+          <input type="text" name="anciennete" placeholder="Ancienneté" required class="w-full p-2 border rounded">
+        </div>
+      </fieldset>
+
+      <!-- Classe Herberium 
+      <fieldset class="bg-white p-6 rounded-lg shadow mb-4">
+        <legend class="text-2xl font-semibold">Classe Herberium</legend>
+        <div class="space-y-4">
+          <input type="text" name="code-classe-herberium" placeholder="Code Classe Herberium" required class="w-full p-2 border rounded">
+          <input type="text" name="numero-etagere" placeholder="Numero Etagère" required class="w-full p-2 border rounded">
+        </div>
+      </fieldset>
+
+      <!-- Origine 
+      <fieldset class="bg-white p-6 rounded-lg shadow mb-4">
+        <legend class="text-2xl font-semibold">Origine</legend>
+        <div class="space-y-4">
+          <input type="text" name="numero-collection" placeholder="Numero Collection" required class="w-full p-2 border rounded">
+          <input type="text" name="adresse-origine" placeholder="Adresse Origine" required class="w-full p-2 border rounded">
+          <input type="text" name="nom-collecteur" placeholder="Nom Collecteur" required class="w-full p-2 border rounded">
+        </div>
+      </fieldset>
+
+      <!-- Cultivars 
+      <fieldset class="bg-white p-6 rounded-lg shadow mb-4">
+        <legend class="text-2xl font-semibold">Cultivars</legend>
+        <div class="space-y-4">
+          <input type="text" name="nom-cultivars" placeholder="Nom Cultivars" required class="w-full p-2 border rounded">
+          <input type="text" name="traduction" placeholder="Traduction" required class="w-full p-2 border rounded">
+          <input type="text" name="synonyme" placeholder="Synonyme" required class="w-full p-2 border rounded">
+        </div>
+      </fieldset>
+
+      <!-- Observation 
+      <fieldset class="bg-white p-6 rounded-lg shadow mb-4">
+        <legend class="text-2xl font-semibold">Observation</legend>
+        <div class="space-y-4">
+          <input type="text" name="code-caracteristique" placeholder="Code Caracteristique" required class="w-full p-2 border rounded">
+          <input type="file" name="photo" accept="image/*" required class="w-full p-2 border rounded">
+          <input type="text" name="taille" placeholder="Taille" required class="w-full p-2 border rounded">
+        </div>
+      </fieldset>
+
+      <!-- Caractéristiques Fruits 
+      <fieldset class="bg-white p-6 rounded-lg shadow mb-4">
+        <legend class="text-2xl font-semibold">Caractéristiques Fruits</legend>
+        <div class="space-y-4">
+          <input type="text" name="code-caracteristique-fruits" placeholder="Code Caracteristique" required class="w-full p-2 border rounded">
+          <input type="text" name="forme-de-fruit" placeholder="Forme de Fruit" required class="w-full p-2 border rounded">
+          <input type="text" name="couleur-peau" placeholder="Couleur Peau" required class="w-full p-2 border rounded">
+          <input type="text" name="couleur-chair" placeholder="Couleur Chair" required class="w-full p-2 border rounded">
+          <input type="text" name="poids" placeholder="Poids" required class="w-full p-2 border rounded">
+          <input type="text" name="teneur-de-sucre" placeholder="Teneur de Sucre" required class="w-full p-2 border rounded">
+        </div>
+      </fieldset>
+
+      <!-- Submit Button 
+      <button type="submit" class="bg-green-500 text-white px-8 py-4 rounded-lg hover:bg-green-600">
+        Créer
+      </button>
+    </form>
+  -->
+  </main>
+{% endblock content %}

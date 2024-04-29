@@ -1,0 +1,41 @@
+<!-- import_files.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Files</title>
+</head>
+<body>
+    <h1>Importer les fichiers</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="folder" webkitdirectory directory multiple>
+        <button type="submit">Importer</button>
+    </form>
+    
+    <h2>Liste des fichiers importés</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Date d'importation</th>
+                <th>État</th>
+                <th>Taille</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+            <tr>
+                <td>{{ file.name }}</td>
+                <td>{{ file.date_import }}</td>
+                <td>{{ file.etat }}</td>
+                <td>{{ file.taille }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

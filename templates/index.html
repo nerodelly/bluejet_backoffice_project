@@ -1,0 +1,80 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Bluejet &#8211; Accueil{% endblock %} {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  .card-container {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 auto;
+      max-width: 1200px; /* Set maximum width */
+  }
+
+  .card {
+      flex: 1;
+      margin-right: 20px; /* Adjust spacing between cards */
+  }
+
+  @media (max-width: 768px) {
+      .card-container {
+          flex-direction: column;
+          align-items: stretch;
+      }
+
+      .card {
+          margin-right: 0;
+          margin-bottom: 20px;
+      }
+  }
+</style>
+
+  <!-- Contenu principal -->
+  <main class="container mx-auto p-8">
+    <!-- En-tête -->
+    <div class="flex justify-between items-center bg-white p-8 rounded-lg shadow mb-8">
+      <div>
+        <h1 class="text-4xl font-semibold text-blue-500">Welcome, {{user.username}}!</h1>
+        <p class="text-gray-600">Here is the database dashboard </p>
+      </div>
+      <div class="space-x-4">
+        
+        </div>
+        
+    </div>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll("button");
+        buttons.forEach(button => {
+          button.addEventListener("click", function() {
+            const dropdown = this.nextElementSibling;
+            dropdown.classList.toggle('hidden');
+          });
+        });
+      });
+    </script>
+        </div>
+
+    
+ <div class="card-container">
+        <!-- Database Link -->
+        <div class="card bg-blue-100 hover:bg-gray-200 rounded-lg shadow p-4">
+            <a href="{% url 'database_actions' %}" class="flex items-center justify-center text-gray-900 focus:outline-none">
+                <i class="fas fa-database mr-2"></i>
+                Database
+            </a>
+        </div>
+        <!-- Analytics Link -->
+        <div class="card bg-green-100 hover:bg-gray-200 rounded-lg shadow p-4">
+            <a href="{% url 'analytics' %}" class="flex items-center justify-center text-gray-900 focus:outline-none">
+                <i class="fas fa-chart-bar mr-2"></i>
+                Analytics
+            </a>
+        </div>
+        <!-- Predictions Link -->
+        <div class="card bg-yellow-100 hover:bg-gray-200 rounded-lg shadow p-4">
+            <a href="{% url 'predictions' %}" class="flex items-center justify-center text-gray-900 focus:outline-none">
+                <i class="fas fa-lightbulb mr-2"></i>
+                Predictions
+            </a>
+        </div>
+    </div>
+{% endblock content %}

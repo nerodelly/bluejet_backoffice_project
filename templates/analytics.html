@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}analytics{% endblock %}
+{% block content %}
+<main class="container mx-auto p-8">
+    <h1 class="text-4xl font-semibold mb-8">Analytics</h1>
+    <!-- Statistiques -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="bg-white p-8 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Chart1</h2>
+        <canvas id="barChart" class="h-40"></canvas>
+      </div>
+      <div class="bg-white p-8 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Chart 2</h2>
+        <canvas id="pieChart" class="h-40"></canvas>
+      </div>
+      <div class="bg-white p-8 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Chart 3</h2>
+        <canvas id="doughnutChart" class="h-40"></canvas>
+      </div>
+  </div>
+</main>
+
+<script>
+  // Graphique à barres pour les Types d'Accession
+  var ctxBar = document.getElementById("barChart").getContext("2d");
+  var labels = {{ type_count|safe }};
+  var barData = {
+    labels: labels.map(e => e.type_accession),
+    datasets: [{
+      label: "Nombre d'Accessions",
+      data: labels.map(e => e.count),
+      backgroundColor: ["#1D72B8", "#F46036", "#2E294E"],
+    }],
+  };
+  var barChart = new Chart(ctxBar, {
+    type: "bar",
+    data: barData,
+  });
+
+  // Graphique à secteurs pour le Compte des Parcelles
+  var ctxPie = document.getElementById("pieChart").getContext("2d");
+  var pieData = {
+    labels: ["Parcelles"],
+    datasets: [{
+      data: [{{ parcelle_count }}],
+      backgroundColor: ["#6B4226"],
+    }],
+  };
+  var pieChart = new Chart(ctxPie, {
+    type: "pie",
+    data: pieData,
+  });
+
+  // Graphique à anneaux pour les Types de Floraison
+  var ctxDoughnut = document.getElementById("doughnutChart").getContext("2d");
+  var floraison_labels = {{ floraison_count|safe }};
+  var doughnutData = {
+    labels: floraison_labels.map(e => e.floraison),
+    datasets: [{
+      data: floraison_labels.map(e => e.count),
+      backgroundColor: ["#D7263D", "#F46036", "#6B4226"],
+    }],
+  };
+  var doughnutChart = new Chart(ctxDoughnut, {
+    type: "doughnut",
+    data: doughnutData,
+  });
+</script>
+
+{% endblock %}
