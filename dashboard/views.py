@@ -5,12 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Count
 from .models import *
-from .csv_importer import import_new_csv_files
 from .forms import *
 from django.http import JsonResponse
-from .forms import UploadFileForm
 from django.utils import timezone
-
+from django.conf import settings
+import os
 @login_required
 def index(request):
     # Assuming you want to pass the current user to the template
@@ -90,3 +89,81 @@ def my_view(request):
     else:
         form = FileForm()
     return render(request, 'show_database_files.html', {'form': form})
+def upload_files(request):
+    if request.method == 'POST' and request.FILES:
+        folder_path = request.POST.get('folder_path')
+        if folder_path:
+            media_root = settings.MEDIA_ROOT
+            for filename in os.listdir(folder_path):
+                filepath = os.path.join(folder_path, filename)
+                if os.path.isfile(filepath):
+                    new_filepath = os.path.join(media_root, filename)
+                    os.rename(filepath, new_filepath)
+            return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
+
+@login_required
+def move_files(request):
+    if request.method == 'POST':
+        folder_path = request.POST.get('folder_path')
+        if folder_path:
+            media_root = settings.MEDIA_ROOT
+            try:
+                for filename in os.listdir(folder_path):
+                    filepath = os.path.join(folder_path, filename)
+                    if os.path.isfile(filepath):
+                        # Construct the new file path in the media folder
+                        new_filepath = os.path.join(media_root, filename)
+                        # Move the file to the media folder
+                        os.rename(filepath, new_filepath)
+                return JsonResponse({'success': True})
+            except Exception as e:
+                return JsonResponse({'success': False, 'error': str(e)})
+        else:
+            return JsonResponse({'success': False, 'error': 'Folder path is missing'})
+    else:
+        return JsonResponse({'success': False, 'error': 'Only POST requests are allowed'})
+    import_files_from_media_folder()
+
+
+
+def import_files_from_media_folder():
+    media_folder = settings.MEDIA_ROOT
+    for filename in os.listdir(media_folder):
+        if filename.endswith('.txt'):  # Assuming text files
+            filepath = os.path.join(media_folder, filename)
+            # Get file size in bytes
+            size = os.path.getsize(filepath)
+            # Check if the file already exists in the database
+            if not File.objects.filter(name=filename).exists():
+                # Create a new File object and save it
+                file = File.objects.create(
+                    name=filename,
+                    date_import=timezone.now(),
+                    taille=size,
+                    etat='not_treated'  # Initial state
+                )
+                file.save()
+
+# Call the function to import files from the media folder
+import_files_from_media_folder()
+
+def prediction_submit(request):
+    if request.method == 'POST':
+        form = PredictionForm(request.POST)
+        if form.is_valid():
+            longitude = form.cleaned_data['longitude']
+            latitude = form.cleaned_data['latitude']
+            # Perform prediction or processing here using longitude and latitude
+            predicted_moisture = perform_prediction(longitude, latitude)  # Example function for prediction
+            # Render the prediction result template with the predicted moisture level
+            return render(request, 'prediction_submit.html', {'predicted_moisture': predicted_moisture})
+    else:
+        form = PredictionForm()
+    return render(request, 'prediction.html', {'form': form})
+
+# Example function for prediction (replace with your actual prediction logic)
+def perform_prediction(longitude, latitude):
+    # Your prediction logic goes here
+    # This is just a placeholder, replace with your actual prediction algorithm
+    return 'Placeholder moisture level'

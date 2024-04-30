@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction Result</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Soil Moisture Prediction Result</h1>
+        <div class="mt-4">
+            <p>The predicted soil moisture level for the specified location is:</p>
+            <p><strong>{{ predicted_moisture }}</strong></p>
+        </div>
+        <div class="mt-4">
+            <a href="{% url 'prediction' %}" class="btn btn-primary">Back to Prediction Form</a>
+            <a href="/" class="btn btn-secondary ml-2">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

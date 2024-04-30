@@ -12,6 +12,7 @@ urlpatterns = [
     path('edit-database/', views.edit_database, name='edit_database'),
     path('analytics/', views.analytics_ , name='analytics'),
     path('predictions/', views.predictions_ , name='predictions'),
- 
+    path('move_files/', views.move_files, name='move_files'),
+    path('prediction_submit/', views.prediction_submit, name='prediction_submit')
     
 ]
