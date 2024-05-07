@@ -2,5 +2,24 @@
 {% load static %}
 {% block title %}Edit database{% endblock %}
 {% block content %}
-
+<table id="fileTable" class="min-w-full text-gray-900">
+    <thead>
+      <tr class="bg-gray-100">
+        <th class="py-4 px-6 border-b text-left">X</th>
+        <th class="py-4 px-6 border-b text-left">Y</th>
+        <th class="py-4 px-6 border-b text-left">Z</th>
+        <th class="py-4 px-6 border-b text-left">W</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for parcelle_group in parcelle_groups %}
+      <tr class="hover:bg-gray-100">
+        <td class="py-4 px-6 border-b">{{ parcelle_group.parcelle.code_arbre }}</td>
+        <td class="py-4 px-6 border-b">{{ parcelle_group.parcelle.numero_collection }}</td>
+        <td class="py-4 px-6 border-b">{{ parcelle_group.caracteristiques_arbre.code_caracteristique_arbre }}</td>
+        <td class="py-4 px-6 border-b">{{ parcelle_group.caracteristiques_arbre.port }}</td>
+  </tr>
+  {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Farmer(models.Model):
     phone_number = models.CharField(max_length=20)
     password = models.CharField(max_length=100)

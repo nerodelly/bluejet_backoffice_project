@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.conf import settings
 import os
+
 @login_required
 def index(request):
     # Assuming you want to pass the current user to the template
@@ -89,21 +90,19 @@ def my_view(request):
     else:
         form = FileForm()
     return render(request, 'show_database_files.html', {'form': form})
-def upload_files(request):
-    if request.method == 'POST' and request.FILES:
-        folder_path = request.POST.get('folder_path')
-        if folder_path:
-            media_root = settings.MEDIA_ROOT
-            for filename in os.listdir(folder_path):
-                filepath = os.path.join(folder_path, filename)
-                if os.path.isfile(filepath):
-                    new_filepath = os.path.join(media_root, filename)
-                    os.rename(filepath, new_filepath)
-            return JsonResponse({'success': True})
-    return JsonResponse({'success': False})
 
 @login_required
 def move_files(request):
+    if request.method == 'POST' and request.FILES:
+        form = UploadFileForm(request.POST,request.FILES)
+        file = request.FILES('file')
+        return HttpResponse('the name of uploaded file is =' + str(file))
+    else :
+        form = UploadFileForm()
+    return render(request, 'upload.html', {'form': form})
+ 
+@login_required
+def upload_files(request):
     if request.method == 'POST':
         folder_path = request.POST.get('folder_path')
         if folder_path:
@@ -125,8 +124,7 @@ def move_files(request):
         return JsonResponse({'success': False, 'error': 'Only POST requests are allowed'})
     import_files_from_media_folder()
 
-
-
+@login_required
 def import_files_from_media_folder():
     media_folder = settings.MEDIA_ROOT
     for filename in os.listdir(media_folder):
@@ -146,8 +144,6 @@ def import_files_from_media_folder():
                 file.save()
 
 # Call the function to import files from the media folder
-import_files_from_media_folder()
-
 def prediction_submit(request):
     if request.method == 'POST':
         form = PredictionForm(request.POST)

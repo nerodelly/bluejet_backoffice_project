@@ -13,6 +13,7 @@ urlpatterns = [
     path('analytics/', views.analytics_ , name='analytics'),
     path('predictions/', views.predictions_ , name='predictions'),
     path('move_files/', views.move_files, name='move_files'),
-    path('prediction_submit/', views.prediction_submit, name='prediction_submit')
+    path('prediction_submit/', views.prediction_submit, name='prediction_submit'),
+    path('list/',views.upload_files,name='list')
     
 ]

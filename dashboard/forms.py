@@ -2,8 +2,9 @@ from django import forms
 from .models import File
 
 class UploadFileForm(forms.ModelForm):
-    file = forms.FileField()
-
+    class Meta:
+        model = File
+        fields = ['name', 'etat', 'taille']
 
 class PredictionForm(forms.Form):
     measure_sensor_choices = [
